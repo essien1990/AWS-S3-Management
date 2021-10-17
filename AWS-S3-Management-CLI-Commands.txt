@@ -1,0 +1,142 @@
+Boto3: is AWS SDK for Python (Boto3) to create, configure, and manage AWS services, such as Amazon Elastic Compute Cloud (Amazon EC2) and Amazon Simple Storage Service (Amazon S3).
+
+aws --version
+aws-cli/1.20.6 Python/3.8.10 Linux/5.11.0-27-generic botocore/1.21.6
+
+source blossomenv/bin/activate
+
+aws configure
+
+AWS Access Key ID [None]: AKIAYMN5YFRCCC66R3UA
+AWS Secret Access Key [None]: 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
+Default region name [None]: eu-west-1
+Default output format [None]: json
+
+mdkir awsdata
+cd awsdata
+touch data1.csv data2.csv data3.csv
+
+Command Line
+Create new Bucketgkansong@gmail.com
+aws s3 mb s3://blossom-data-eng-user3 --region eu-west-1
+make_bucket: blossom-data-eng-user3
+
+List all S3 bucket created
+aws s3 ls
+2021-09-21 11:13:08 blossom-data-eng
+
+List all files in S3 bucket recursively 
+ls command will recursively list objects in a bucket
+aws s3 ls s3://blossom-data-eng/ --recursive 
+2021-09-21 13:04:55          0 data
+2021-09-21 11:14:34          0 data/
+2021-09-21 13:24:28          0 data/data1.csv
+2021-09-21 13:24:28          0 data/data2.csv
+
+ls command will recursively list objects in a bucket  with --human-readable  human readability which display the file size  and --summarize displays the total number of objects and total size at the end of the result listing
+
+aws s3 ls s3://blossom-data-eng/ --recursive --recursive --human-readable --summarize
+2021-09-21 13:04:55    0 Bytes data
+2021-09-21 11:14:34    0 Bytes data/
+2021-09-21 13:24:28    0 Bytes data/data1.csv
+2021-09-21 13:24:28    0 Bytes data/data2.csv
+2021-09-21 13:50:19    0 Bytes data/data3.csv
+
+List all objects  in S3 bucket recursively 
+aws s3 ls s3://blossom-data-eng-user3/ --recursive
+2021-09-21 13:32:52          0 data1.csv
+2021-09-21 13:32:52          0 data2.csv
+2021-09-21 13:36:29          0 data3.csv
+
+Copy specific  file from local dir to S3 bucket
+aws s3 cp data1.csv s3://blossom-data-eng/data
+upload: ./data1.csv to s3://blossom-data-eng/data
+
+Copy contents or files of /awsdata ie local dir to S3 bucket recursively
+aws s3 cp awsdata/ s3://blossom-data-eng/data --recursive
+upload: awsdata/data1.csv to s3://blossom-data-eng/data/data1.csv
+upload: awsdata/data2.csv to s3://blossom-data-eng/data/data2.csv
+
+Copy content or files of /awsdata ie local dir to S3 bucket recursively
+aws s3 cp . s3://blossom-data-eng/data --recursive
+upload: ./data1.csv to s3://blossom-data-eng/data/data1.csv
+upload: ./data2.csv to s3://blossom-data-eng/data/data2.csv
+
+Copy contents or files of /awsdata ie local dir to S3 bucket recursively
+aws s3 cp awsdata/ s3://blossom-data-eng-user3 --recursive
+upload: awsdata/data2.csv to s3://blossom-data-eng-user3/data2.csv
+upload: awsdata/data1.csv to s3://blossom-data-eng-user3/data1.csv
+
+Copy the *.csv files in current local directory  to a new folder data
+aws s3 cp . s3://blossom-data-eng-user3/data/ --recursive
+upload: ./data1.csv to s3://blossom-data-eng-user3/data/data1.csv
+upload: ./data2.csv to s3://blossom-data-eng-user3/data/data2.csv
+upload: ./data3.csv to s3://blossom-data-eng-user3/data/data3.csv
+
+Move data3.csv  from s3 bucket to another s3 bucket
+aws s3 mv s3://blossom-data-eng/data3.csv s3://blossom-data-eng-user3
+move: s3://blossom-data-eng/data3.csv to s3://blossom-data-eng-user3/data3.csv
+
+Sync local files to s3 buckets
+aws s3 sync awsdata/ s3://blossom-data-eng/data
+upload: awsdata/data3.csv to s3://blossom-data-eng/data/data3.csv
+
+Displays the operations that would be performed using the specified command without actually running them
+aws s3 rm s3://blossom-data-eng/data --recursive --dryrun
+aws s3 rm s3://blossom-data-eng/data/ --recursive --dryrun
+(dryrun) delete: s3://blossom-data-eng/data/
+(dryrun) delete: s3://blossom-data-eng/data/data1.csv
+(dryrun) delete: s3://blossom-data-eng/data/data2.csv
+(dryrun) delete: s3://blossom-data-eng/data/data3.csv
+
+List to the object under S3 bucket
+aws s3 ls s3://blossom-data-eng-user3
+                           PRE data/
+2021-09-21 13:32:52          0 data1.csv
+2021-09-21 13:32:52          0 data2.csv
+2021-09-21 13:36:29          0 data3.csv
+
+Remove /data folder  and all files(all objects) under s3 bucket using --recursive option
+aws s3 rm s3://blossom-data-eng-user3/data --recursive
+delete: s3://blossom-data-eng-user3/data/data1.csv
+delete: s3://blossom-data-eng-user3/data/data2.csv
+delete: s3://blossom-data-eng-user3/data/data2.txt
+delete: s3://blossom-data-eng-user3/data/data1.txt
+delete: s3://blossom-data-eng-user3/data/data3.csv
+
+List to the object under S3 bucket
+aws s3 ls s3://blossom-data-eng-user3
+2021-09-21 13:32:52          0 data1.csv
+2021-09-21 13:32:52          0 data2.csv
+2021-09-21 13:36:29          0 data3.csv
+
+Recursively remove all objects under S3 bucket in /data that includes *.csv and excludes all  
+aws s3 rm s3://blossom-data-eng-user3/data  --recursive --exclude "*" --include "*.csv"
+delete: s3://blossom-data-eng-user3/data/data1.csv
+delete: s3://blossom-data-eng-user3/data/data3.csv
+delete: s3://blossom-data-eng-user3/data/data2.csv
+
+aws s3 ls s3://blossom-data-eng-user3/data/
+2021-09-21 14:35:28          0 data/data1.txt
+2021-09-21 14:35:28          0 data/data2.txt
+
+
+Remove an empty S3 bucket
+aws s3 rb s3://blossom-data-eng-user3
+remove_bucket failed: s3://blossom-data-eng-user3 An error occurred (BucketNotEmpty) when calling the DeleteBucket operation: The bucket you tried to delete is not empty
+
+The --force parameter, first remove all of the objects in the bucket and then remove the bucket itself
+aws s3 rb s3://blossom-data-eng-user3 --force
+delete: s3://blossom-data-eng-user3/data/data1.txt
+delete: s3://blossom-data-eng-user3/data/data2.csv
+delete: s3://blossom-data-eng-user3/data/data1.csv
+delete: s3://blossom-data-eng-user3/data3.csv
+delete: s3://blossom-data-eng-user3/data/data3.csv
+delete: s3://blossom-data-eng-user3/data2.csv
+delete: s3://blossom-data-eng-user3/data1.csv
+delete: s3://blossom-data-eng-user3/data/data2.txt
+remove_bucket: blossom-data-eng-user3
+
+list and check what is in the bucket
+aws s3 ls
+2021-09-21 11:13:08 blossom-data-eng
