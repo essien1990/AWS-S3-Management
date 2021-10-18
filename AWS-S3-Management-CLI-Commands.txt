@@ -7,8 +7,8 @@ source blossomenv/bin/activate
 
 aws configure
 
-AWS Access Key ID [None]: *****************
-AWS Secret Access Key [None]: ********************
+AWS Access Key ID [None]:
+AWS Secret Access Key [None]:
 Default region name [None]: eu-west-1
 Default output format [None]: json
 
